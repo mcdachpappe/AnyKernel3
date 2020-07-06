@@ -53,6 +53,16 @@ fi;
 ## AnyKernel boot install
 dump_boot;
 
+# Reset cmdline
+patch_cmdline "is_androidR" "";
+
+android_version=$(file_getprop /system/build.prop ro.build.version.release);
+
+# Patch cmdline, if on Android 12
+if [ $android_version = 12 ]; then
+  patch_cmdline "is_androidR" "is_androidR";
+fi;
+
 # Install the boot image
 write_boot;
 
