@@ -30,6 +30,25 @@ ramdisk_compression=auto;
 ## Trim data partition
 $bin/busybox fstrim -v /data;
 
+## Select the correct image to flash
+userflavor="$(file_getprop /system/build.prop "ro.build.user"):$(file_getprop /system/build.prop "ro.build.flavor")";
+case "$userflavor" in
+  jenkins:qssi-user)
+    os="oos";
+    os_string="OxygenOS";
+    ;;
+  *)
+    os="custom";
+    os_string="a custom ROM";
+    ;;
+esac;
+ui_print " " "You are on $os_string!";
+if [ -f $home/kernels/$os/Image.gz-dtb ]; then
+  mv $home/kernels/$os/Image.gz-dtb $home/Image.gz-dtb;
+else
+  ui_print " " "There is no kernel for your OS in this zip! Aborting..."; exit 1;
+fi;
+
 ## AnyKernel boot install
 dump_boot;
 
