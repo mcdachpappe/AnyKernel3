@@ -32,6 +32,29 @@ patch_vbmeta_flag=auto;
 ## Trim data partition
 $BB fstrim -v /data;
 
+## Select the correct image to flash / Detect first appearance in build.prop only
+USERFLAVOR="$(grep -m 1 "^ro.build.user" /system/build.prop | cut -d= -f2):$(grep -m 1 "^ro.build.flavor" /system/build.prop | cut -d= -f2)";
+
+case "$USERFLAVOR" in
+  "OnePlus:OnePlus6-user" | "OnePlus:OnePlus6T-user" | "jenkins:qssi-user")
+    OS="oos";
+    OS_STRING="OxygenOS";
+    ;;
+  *)
+    OS="custom";
+    OS_STRING="a custom ROM";
+    ;;
+esac;
+
+ui_print " " "You are on $OS_STRING!";
+
+# Move kernel image
+if [ -f $home/kernels/$OS/Image.gz-dtb ]; then
+  mv $home/kernels/$OS/Image.gz-dtb $home/Image.gz-dtb;
+else
+  ui_print " " "There is no kernel for your OS in this zip! Aborting..."; exit 1;
+fi;
+
 ## AnyKernel boot install
 dump_boot;
 
