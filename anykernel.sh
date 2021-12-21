@@ -15,7 +15,7 @@ device.name1=OnePlus6
 device.name2=enchilada
 device.name3=OnePlus6T
 device.name4=fajita
-supported.versions=11
+supported.versions=11 - 12
 '; } # end properties
 
 # shell variables
