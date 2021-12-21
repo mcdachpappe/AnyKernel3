@@ -22,6 +22,7 @@ supported.versions=11
 block=/dev/block/bootdevice/by-name/boot;
 is_slot_device=1;
 ramdisk_compression=auto;
+patch_vbmeta_flag=auto;
 
 ## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables - see for reference
@@ -55,4 +56,4 @@ dump_boot;
 # Install the boot image
 write_boot;
 
-## end install
+## end boot install

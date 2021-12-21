@@ -49,6 +49,8 @@ __supported.patchlevels=__ will match against ro.build.version.security_patch fr
 
 `ramdisk_compression=auto` allows automatically repacking the ramdisk with the format detected during unpack. Changing `auto` to `gz`, `lzo`, `lzma`, `xz`, `bz2`, `lz4`, or `lz4-l` (for lz4 legacy) instead forces the repack as that format, and using `cpio` or `none` will (attempt to) force the repack as uncompressed.
 
+`patch_vbmeta_flag=auto` allows automatically using the default AVBv2 vbmeta flag on repack, and use the Magisk configuration Canary 23016+. Set to `0` forces keeping whatever is in the original AVBv2 flags, and set to `1` forces patching the flag (only necessary on few devices).
+
 `customdd="<arguments>"` may be added to allow specifying additional dd parameters for devices that need to hack their kernel directly into a large partition like mmcblk0, or force use of dd for flashing.
 
 `slot_select=active|inactive` may be added to allow specifying the target slot. If omitted the default remains `active`.
@@ -88,7 +90,7 @@ patch_ueventd <ueventd file> <device node> <permissions> <chown> <chgrp>
 
 repack_ramdisk
 flash_boot
-flash_dtbo
+flash_generic <partition name>
 write_boot
 
 reset_ak [keep]
@@ -105,7 +107,7 @@ __"before|after"__ requires you simply specify __"before"__ or __"after"__ for t
 
 __"block|mount|fstype|options|flags"__ requires you specify which part (listed in order) of the fstab entry you want to check and alter.
 
-_dump_boot_ and _write_boot_ are the default method of unpacking/repacking, but for more granular control, or omitting ramdisk changes entirely ("OG AK" mode), these can be separated into _split_boot; unpack_ramdisk_ and _repack_ramdisk; flash_boot_ respectively. _flash_dtbo_ can be used to flash a dtbo image. It is automatically included in _write_boot_ but can be called separately if using "OG AK" mode or creating a dtbo only zip.
+_dump_boot_ and _write_boot_ are the default method of unpacking/repacking, but for more granular control, or omitting ramdisk changes entirely ("OG AK" mode), these can be separated into _split_boot; unpack_ramdisk_ and _repack_ramdisk; flash_boot_ respectively. _flash_generic_ can be used to flash an image to the corresponding partition. It is automatically included for dtbo and vendor_dlkm in _write_boot_ but can be called separately if using "OG AK" mode or creating a simple partition flashing only zip.
 
 Multi-partition zips can be created by removing the ramdisk and patch folders from the zip and including instead "-files" folders named for the partition (without slot suffix), e.g. boot-files + recovery-files, or kernel-files + ramdisk-files (on some Treble devices). These then contain Image.gz, and ramdisk, patch, etc. subfolders for each partition. To setup for the next partition, simply set `block=` (without slot suffix) and `ramdisk_compression=` for the new target partition and use the _reset_ak_ command.
 
@@ -138,7 +140,7 @@ Optionally moving ARM builds to tools/arm and putting x86 builds in tools/x86 wi
 
 ## // Instructions ##
 
-1. Place final kernel build product, e.g. Image.gz-dtb or zImage to name a couple, in the zip root (any separate dt, dtb or recovery_dtbo, and/or dtbo should also go here for devices that require custom ones, each will fallback to the original if not included)
+1. Place final kernel build product, e.g. Image.gz-dtb or zImage to name a couple, in the zip root (any separate dt, dtb or recovery_dtbo, dtbo and/or vendor_dlkm should also go here for devices that require custom ones, each will fallback to the original if not included)
 
 2. Place any required ramdisk files in /ramdisk (/vendor_ramdisk for simple multi-partition vendor_boot support) and module files in /modules (with the full path like /modules/system/lib/modules)
 
