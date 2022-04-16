@@ -15,7 +15,7 @@ device.name1=OnePlus6
 device.name2=enchilada
 device.name3=OnePlus6T
 device.name4=fajita
-supported.versions=11 - 12
+supported.versions=10 - 12
 '; } # end properties
 
 # shell variables
@@ -32,9 +32,9 @@ patch_vbmeta_flag=auto;
 $bin/busybox fstrim -v /data;
 
 ## Select the correct image to flash
-userflavor="$(file_getprop /system/build.prop "ro.build.user"):$(file_getprop /system/build.prop "ro.build.flavor")";
+userflavor="$(file_getprop /system/build.prop "ro.build.flavor")";
 case "$userflavor" in
-  jenkins:qssi-user)
+  enchilada-user|fajita-user|qssi-user)
     os="oos";
     os_string="OxygenOS";
     ;;
