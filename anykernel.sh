@@ -58,5 +58,16 @@ fi;
 ## AnyKernel boot install
 dump_boot;
 
+# Reset cmdline
+patch_cmdline "pre_android_S" "";
+
+# Get Android version
+android_version=$(file_getprop /system/build.prop "ro.build.version.release");
+
+# Patch cmdline, if on custom ROM Android 11 (R) and below
+if [ "$OS" = "custom" ] && [ "$android_version" \< "12" ]; then
+  patch_cmdline "pre_android_S" "pre_android_S";
+fi;
+
 write_boot;
 ## end boot install
