@@ -15,7 +15,7 @@ device.name2=komodo
 device.name3=tokay
 device.name4=comet
 supported.versions=15
-supported.patchlevels=2024-12 - 2025-04
+supported.patchlevels=2024-12 - 2025-05
 supported.vendorpatchlevels=
 '; } # end properties
 
