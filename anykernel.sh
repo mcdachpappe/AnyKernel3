@@ -4,7 +4,7 @@
 ### AnyKernel setup
 # global properties
 properties() { '
-kernel.string=mcd Kernel for the Pixel 9/Pro/Fold/XL
+kernel.string=mcd Kernel for Pixel 9 Series (Android 15)
 do.devicecheck=1
 do.modules=0
 do.systemless=1
@@ -15,7 +15,7 @@ device.name2=komodo
 device.name3=tokay
 device.name4=comet
 supported.versions=15
-supported.patchlevels=2024-12 - 2025-05
+supported.patchlevels=2024-12 -
 supported.vendorpatchlevels=
 '; } # end properties
 
